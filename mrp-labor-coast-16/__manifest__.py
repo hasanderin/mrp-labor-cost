@@ -14,7 +14,6 @@
         'views/mrp_production_views.xml',
         'report/mrp_production_report.xml',
         'report/mrp_production_templates.xml',
-        'report/mrp_bom_structure_templates.xml',
     ],
     'installable': True,
     'application': False,
