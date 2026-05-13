@@ -17,11 +17,40 @@ class ReportBomStructure(models.AbstractModel):
             bom_qty = bom.product_qty or 1.0
             factor = qty / bom_qty
             labor = bom.labor_cost * factor
+
             currency = data.get('currency') or self.env.company.currency_id
             if bom.currency_id != currency:
                 labor = bom.currency_id._convert(
                     labor, currency, self.env.company, fields.Date.today()
                 )
+
+            # Toplam maliyete ekle
             data['cost'] = data.get('cost', 0.0) + labor
             data['bom_cost'] = data.get('bom_cost', 0.0) + labor
+
+            # Tabloda ayrı satır olarak göster
+            labor_row = {
+                'prod_id': False,
+                'prod_name': 'İşçilik Maliyeti',
+                'prod_code': '',
+                'quantity': qty,
+                'uom': bom.product_uom_id.name if bom.product_uom_id else 'Adet',
+                'prod_link': False,
+                'type': 'labor',
+                'cost': labor,
+                'bom_cost': labor,
+                'total': labor,
+                'level': level + 1,
+                'route_name': '',
+                'route_detail': '',
+                'availability_state': 'ok',
+                'availability_display': '',
+                'quantity_available': 0,
+                'quantity_on_hand': 0,
+                'free_qty': 0,
+                'lead_time': False,
+                'components': [],
+            }
+            data.setdefault('components', []).append(labor_row)
+
         return data
