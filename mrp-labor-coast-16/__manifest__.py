@@ -17,7 +17,6 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'mrp_labor_cost/static/src/components/bom_overview_labor.js',
             'mrp_labor_cost/static/src/components/bom_overview_labor.xml',
         ],
     },

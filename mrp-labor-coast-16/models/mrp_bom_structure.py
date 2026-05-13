@@ -15,8 +15,7 @@ class ReportBomStructure(models.AbstractModel):
         if level == 0 and bom and bom.labor_cost:
             qty = line_qty or bom.product_qty or 1.0
             bom_qty = bom.product_qty or 1.0
-            factor = qty / bom_qty
-            labor = bom.labor_cost * factor
+            labor = bom.labor_cost * (qty / bom_qty)
 
             currency = data.get('currency') or self.env.company.currency_id
             if bom.currency_id != currency:
@@ -26,18 +25,7 @@ class ReportBomStructure(models.AbstractModel):
 
             data['cost'] = data.get('cost', 0.0) + labor
             data['bom_cost'] = data.get('bom_cost', 0.0) + labor
-            # Template'in erişebilmesi için sakla
             data['labor_cost_value'] = labor
-            data['labor_cost_currency'] = currency
+            data['currency_id'] = currency.id
 
-        return data
-
-    def _get_report_data(self, bom_id, searchQty=0, searchVariant=False):
-        data = super()._get_report_data(
-            bom_id, searchQty=searchQty, searchVariant=searchVariant
-        )
-        lines = data.get('lines', {})
-        data['labor_cost_value'] = lines.get('labor_cost_value', 0.0)
-        data['labor_cost_currency'] = lines.get('labor_cost_currency',
-                                                  self.env.company.currency_id)
         return data
