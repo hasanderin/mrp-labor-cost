@@ -15,6 +15,12 @@
         'report/mrp_production_report.xml',
         'report/mrp_production_templates.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'mrp_labor_cost/static/src/components/bom_overview_labor.js',
+            'mrp_labor_cost/static/src/components/bom_overview_labor.xml',
+        ],
+    },
     'installable': True,
     'application': False,
     'license': 'LGPL-3',

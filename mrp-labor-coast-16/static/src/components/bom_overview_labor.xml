@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        BomOverview ana şablonunu extend ederek işçilik maliyetini
+        Birim Maliyeti satırından önce gösteriyoruz.
+        t-inherit adı Odoo 16 mrp modülüne göre ayarlanmıştır.
+    -->
+    <t t-inherit="mrp.BomOverview" t-inherit-mode="extension">
+        <xpath expr="//tfoot" position="before">
+            <t t-if="laborCostValue">
+                <tbody class="o_bom_labor_cost_section">
+                    <tr class="table-warning fw-bold">
+                        <td colspan="5">
+                            <i class="fa fa-wrench me-1"/>
+                            İşçilik Maliyeti
+                        </td>
+                        <td class="text-end" colspan="2">
+                            <t t-esc="laborCostFormatted"/>
+                        </td>
+                        <td colspan="2"/>
+                    </tr>
+                </tbody>
+            </t>
+        </xpath>
+    </t>
+
+</templates>
