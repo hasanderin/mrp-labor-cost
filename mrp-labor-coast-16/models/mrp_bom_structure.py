@@ -24,34 +24,20 @@ class ReportBomStructure(models.AbstractModel):
                     labor, currency, self.env.company, fields.Date.today()
                 )
 
-            # Toplam maliyete ekle
             data['cost'] = data.get('cost', 0.0) + labor
             data['bom_cost'] = data.get('bom_cost', 0.0) + labor
+            # Template'in erişebilmesi için sakla
+            data['labor_cost_value'] = labor
+            data['labor_cost_currency'] = currency
 
-            # Tabloda ayrı satır olarak göster
-            labor_row = {
-                'prod_id': False,
-                'prod_name': 'İşçilik Maliyeti',
-                'prod_code': '',
-                'quantity': qty,
-                'uom': bom.product_uom_id.name if bom.product_uom_id else 'Adet',
-                'prod_link': False,
-                'type': 'labor',
-                'cost': labor,
-                'bom_cost': labor,
-                'total': labor,
-                'level': level + 1,
-                'route_name': '',
-                'route_detail': '',
-                'availability_state': 'ok',
-                'availability_display': '',
-                'quantity_available': 0,
-                'quantity_on_hand': 0,
-                'free_qty': 0,
-                'lead_time': False,
-                'components': [],
-                'attachment_ids': [],
-            }
-            data.setdefault('components', []).append(labor_row)
+        return data
 
+    def _get_report_data(self, bom_id, searchQty=0, searchVariant=False):
+        data = super()._get_report_data(
+            bom_id, searchQty=searchQty, searchVariant=searchVariant
+        )
+        lines = data.get('lines', {})
+        data['labor_cost_value'] = lines.get('labor_cost_value', 0.0)
+        data['labor_cost_currency'] = lines.get('labor_cost_currency',
+                                                  self.env.company.currency_id)
         return data

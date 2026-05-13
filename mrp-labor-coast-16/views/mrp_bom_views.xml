@@ -6,8 +6,8 @@
         <field name="model">mrp.bom</field>
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
-            <!-- Şirket alanının ardına işçilik maliyeti ekleniyor -->
-            <xpath expr="//field[@name='company_id']" position="after">
+            <!-- Miktar biriminin ardına işçilik maliyeti ekleniyor -->
+            <xpath expr="//field[@name='product_uom_id']" position="after">
                 <field name="currency_id" invisible="1"/>
                 <field name="labor_cost" widget="monetary"
                        options="{'currency_field': 'currency_id'}"/>
