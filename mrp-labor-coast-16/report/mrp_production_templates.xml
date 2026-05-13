@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_mrp_production_labor">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Başlık -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h2>Üretim Emri: <span t-field="o.name"/></h2>
+                            </div>
+                        </div>
+
+                        <!-- Üretim Bilgileri -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Ürün</strong></td>
+                                        <td><span t-field="o.product_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Miktar</strong></td>
+                                        <td>
+                                            <span t-field="o.product_qty"/>
+                                            <span t-field="o.product_uom_id"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ürün Reçetesi</strong></td>
+                                        <td><span t-field="o.bom_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Planlanan Tarih</strong></td>
+                                        <td><span t-field="o.date_planned_start" t-options='{"widget": "date"}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Durum</strong></td>
+                                        <td><span t-field="o.state"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Şirket</strong></td>
+                                        <td><span t-field="o.company_id"/></td>
+                                    </tr>
+                                    <tr t-if="o.user_id">
+                                        <td><strong>Sorumlu</strong></td>
+                                        <td><span t-field="o.user_id"/></td>
+                                    </tr>
+                                    <tr t-if="o.origin">
+                                        <td><strong>Kaynak</strong></td>
+                                        <td><span t-field="o.origin"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Hammadde Listesi -->
+                        <h4>Hammaddeler</h4>
+                        <table class="table table-sm table-bordered mb-4">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Ürün</th>
+                                    <th class="text-right">Miktar</th>
+                                    <th>Birim</th>
+                                    <th class="text-right">Birim Maliyet</th>
+                                    <th class="text-right">Satır Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.move_raw_ids" t-as="move">
+                                    <tr>
+                                        <td><span t-field="move.product_id"/></td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_qty"/>
+                                        </td>
+                                        <td><span t-field="move.product_uom"/></td>
+                                        <td class="text-right">
+                                            <span t-esc="'{:,.2f}'.format(move.product_id.standard_price)"/>
+                                            <span t-field="o.currency_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="'{:,.2f}'.format(move.product_id.standard_price * move.product_qty)"/>
+                                            <span t-field="o.currency_id"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Maliyet Özeti -->
+                        <div class="row">
+                            <div class="col-6 offset-6">
+                                <table class="table table-sm table-bordered">
+                                    <tr>
+                                        <td><strong>Toplam Malzeme Maliyeti</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.material_cost_total"
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>İşçilik Maliyeti</strong>
+                                            <br/>
+                                            <small class="text-muted">
+                                                <span t-field="o.labor_cost_unit"
+                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                x
+                                                <span t-field="o.product_qty"/>
+                                                adet
+                                            </small>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.labor_cost_total"
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td><strong>Genel Toplam Maliyet</strong></td>
+                                        <td class="text-right">
+                                            <strong>
+                                                <span t-field="o.grand_total_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Birim Maliyet</strong></td>
+                                        <td class="text-right">
+                                            <span t-esc="'{:,.2f}'.format(o.grand_total_cost / (o.product_qty or 1))"/>
+                                            <span t-field="o.currency_id"/>
+                                            / adet
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Not alanı -->
+                        <t t-if="o.note">
+                            <h4 class="mt-4">Notlar</h4>
+                            <p t-field="o.note"/>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

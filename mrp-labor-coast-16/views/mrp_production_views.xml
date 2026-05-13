@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_production_form_view_labor_cost" model="ir.ui.view">
+        <field name="name">mrp.production.form.labor.cost</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Maliyet özeti bölümü üretim formunun en altına ekleniyor -->
+            <xpath expr="//sheet" position="inside">
+                <group string="Maliyet Özeti" col="2"
+                       attrs="{'invisible': [('bom_id', '=', False)]}">
+                    <field name="currency_id" invisible="1"/>
+                    <field name="labor_cost_unit" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"
+                           readonly="1"/>
+                    <field name="labor_cost_total" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"
+                           readonly="1"/>
+                    <field name="material_cost_total" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"
+                           readonly="1"/>
+                    <field name="grand_total_cost" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"
+                           readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

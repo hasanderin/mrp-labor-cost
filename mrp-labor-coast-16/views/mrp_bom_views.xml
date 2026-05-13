@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_bom_form_view_labor_cost" model="ir.ui.view">
+        <field name="name">mrp.bom.form.labor.cost</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Reçete başlık alanlarının ardına işçilik maliyeti ekleniyor -->
+            <xpath expr="//field[@name='picking_type_id']" position="after">
+                <field name="currency_id" invisible="1"/>
+                <field name="labor_cost" widget="monetary"
+                       options="{'currency_field': 'currency_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
