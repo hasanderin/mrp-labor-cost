@@ -50,6 +50,7 @@ class ReportBomStructure(models.AbstractModel):
                 'free_qty': 0,
                 'lead_time': False,
                 'components': [],
+                'attachment_ids': [],
             }
             data.setdefault('components', []).append(labor_row)
 
