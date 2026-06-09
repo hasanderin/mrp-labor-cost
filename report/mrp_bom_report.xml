@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        1. KISIM — PDF RAPORU
+        "Yazdır → BoM Genel Bakış" PDF'inde İşçilik kolonu gösterilir.
+        mrp.report_bom_structure template'i inherit edilir.
+    -->
+    <template id="report_bom_structure_labor_cost"
+              inherit_id="mrp.report_bom_structure">
+
+        <!-- Tablo başlığına İşçilik (₺) kolonu ekleniyor -->
+        <xpath expr="//thead//th[last()]" position="after">
+            <th class="text-right">İşçilik (₺)</th>
+        </xpath>
+
+        <!-- Her BOM satırına o reçetenin iscilik_tutari değeri ekleniyor -->
+        <xpath expr="//tr[hasclass('o_bom_report_line')]/td[last()]"
+               position="after">
+            <td class="text-right">
+                <t t-esc="'%.2f' % (line.get('iscilik_tutari') or 0.0)"/>
+            </td>
+        </xpath>
+
+    </template>
+
+    <!--
+        2. KISIM — WEB GENEL BAKIŞ (PDF ÖZET TABLOLARI)
+        "Yazdır → BoM Genel Bakış" HTML önizlemesinde İşçilik kolonu gösterilir.
+        Not: Genel Bakış butonu (Overview) OWL tabanlı mrp.BomOverview bileşenini
+        kullanır; o bileşen için bkz. static/src/components/bom_overview_labor.xml
+    -->
+    <template id="report_bom_structure_labor_cost_totals"
+              inherit_id="mrp.report_bom_structure">
+
+        <!-- Maliyet özeti satırında BoM Maliyeti'nin yanına İşçilik kolonu ekleniyor -->
+        <xpath expr="//tr[hasclass('o_bom_report_line_unit_price')]"
+               position="before">
+            <t t-if="data.get('iscilik_tutari')">
+                <tr class="o_bom_report_line_labor_cost">
+                    <td colspan="5">
+                        <strong>İşçilik Maliyeti (₺)</strong>
+                    </td>
+                    <td class="text-right" colspan="2">
+                        <strong>
+                            <t t-esc="'%.2f' % (data.get('iscilik_tutari') or 0.0)"/>
+                        </strong>
+                    </td>
+                </tr>
+            </t>
+        </xpath>
+
+    </template>
+
+</odoo>
