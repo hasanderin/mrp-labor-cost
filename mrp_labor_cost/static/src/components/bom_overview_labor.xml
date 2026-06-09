@@ -6,7 +6,7 @@
 
         <!-- Add Labor Cost column header after BoM Cost -->
         <xpath expr="//th[hasclass('o_bom_overview_bom_cost')]" position="after">
-            <th class="text-end">Labor Cost (₺)</th>
+            <th class="text-end">İşçilik (₺)</th>
         </xpath>
 
         <!-- Add labor_cost value in each row after BoM Cost cell -->

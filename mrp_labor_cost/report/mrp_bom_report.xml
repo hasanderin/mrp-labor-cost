@@ -7,7 +7,7 @@
 
         <!-- Add Labor Cost column header -->
         <xpath expr="//thead//th[last()]" position="after">
-            <th class="text-right">Labor Cost (₺)</th>
+            <th class="text-right">İşçilik (₺)</th>
         </xpath>
 
         <!-- Add labor_cost value to each BOM line row -->
@@ -29,7 +29,7 @@
             <t t-if="data.get('labor_cost')">
                 <tr class="o_bom_report_line_labor_cost">
                     <td colspan="5">
-                        <strong>Labor Cost (₺)</strong>
+                        <strong>İşçilik (₺)</strong>
                     </td>
                     <td class="text-right" colspan="2">
                         <strong>
