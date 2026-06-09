@@ -1,45 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- 1. PDF REPORT — inherits mrp.report_bom_structure -->
-    <template id="report_bom_structure_labor_cost"
-              inherit_id="mrp.report_bom_structure">
-
-        <!-- Add Labor Cost column header -->
-        <xpath expr="//thead//th[last()]" position="after">
-            <th class="text-right">İşçilik (₺)</th>
+    <!--
+        1. PDF RAPORU — TABLO BAŞLIĞI
+        Asıl tablo mrp.report_mrp_bom template'inde yer alır.
+        BoM Maliyeti ve Ürün Maliyeti başlıklarından sonra İşçilik (₺) ekleniyor.
+    -->
+    <template id="report_bom_structure_labor_cost_header"
+              inherit_id="mrp.report_mrp_bom">
+        <xpath expr="//thead/tr/th[last()]" position="after">
+            <th t-if="data['show_costs']" class="text-end">İşçilik (₺)</th>
         </xpath>
-
-        <!-- Add labor_cost value to each BOM line row -->
-        <xpath expr="//tr[hasclass('o_bom_report_line')]/td[last()]"
-               position="after">
-            <td class="text-right">
-                <t t-esc="'%.2f' % (line.get('labor_cost') or 0.0)"/>
-            </td>
-        </xpath>
-
     </template>
 
-    <!-- 2. PDF COST SUMMARY — adds Labor Cost row next to BoM Cost -->
-    <template id="report_bom_structure_labor_cost_totals"
-              inherit_id="mrp.report_bom_structure">
-
-        <xpath expr="//tr[hasclass('o_bom_report_line_unit_price')]"
-               position="before">
-            <t t-if="data.get('labor_cost')">
-                <tr class="o_bom_report_line_labor_cost">
-                    <td colspan="5">
-                        <strong>İşçilik (₺)</strong>
-                    </td>
-                    <td class="text-right" colspan="2">
-                        <strong>
-                            <t t-esc="'%.2f' % (data.get('labor_cost') or 0.0)"/>
-                        </strong>
-                    </td>
-                </tr>
-            </t>
+    <!--
+        2. PDF RAPORU — SATIR DEĞERLERİ
+        Her BOM satırı mrp.report_mrp_bom_pdf_line ile render edilir.
+        Satırdaki son td'den sonra o reçetenin labor_cost değeri ekleniyor.
+    -->
+    <template id="report_bom_structure_labor_cost_line"
+              inherit_id="mrp.report_mrp_bom_pdf_line">
+        <xpath expr="//tr/td[last()]" position="after">
+            <td t-if="data['show_costs']" class="text-end">
+                <t t-esc="'%.2f' % (l.get('labor_cost') or 0.0)"/>
+            </td>
         </xpath>
-
     </template>
 
 </odoo>
