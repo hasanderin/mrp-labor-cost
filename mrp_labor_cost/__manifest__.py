@@ -13,11 +13,6 @@
         'views/mrp_bom_views.xml',
         'report/mrp_bom_report.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'mrp_labor_cost/static/src/components/bom_overview_labor.xml',
-        ],
-    },
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
