@@ -6,13 +6,8 @@
         <field name="model">mrp.bom</field>
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
-            <!--
-                product_uom_id (Birim) alanının hemen ardına İşçilik (₺) ekleniyor.
-                Odoo 16 BOM form view'da grup XPath güvenilir olmadığından
-                alan bazlı XPath kullanılır.
-            -->
             <xpath expr="//field[@name='product_uom_id']" position="after">
-                <field name="iscilik_tutari" string="İşçilik (₺)"/>
+                <field name="labor_cost" string="Labor Cost (₺)"/>
             </xpath>
         </field>
     </record>

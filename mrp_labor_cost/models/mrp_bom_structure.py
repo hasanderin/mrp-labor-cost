@@ -12,5 +12,5 @@ class ReportBomStructure(models.AbstractModel):
             bom_line=bom_line, level=level, parent_bom=parent_bom,
             index=index, product_info=product_info, ignore_stock=ignore_stock,
         )
-        data['iscilik_tutari'] = bom.iscilik_tutari if bom else 0.0
+        data['labor_cost'] = bom.labor_cost if bom else 0.0
         return data

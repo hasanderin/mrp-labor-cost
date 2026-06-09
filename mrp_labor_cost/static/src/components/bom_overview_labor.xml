@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
 
-    <!--
-        Odoo 16 "Genel Bakış" butonu mrp.BomOverview OWL bileşenini açar.
-        QWeb template değil OWL template inheritance kullanılır.
-        İşçilik (₺) kolonu BoM Maliyeti kolonunun yanına ayrı bir kolon olarak eklenir.
-    -->
+    <!-- Extends mrp.BomOverview OWL component (Overview button) -->
     <t t-inherit="mrp.BomOverview" t-inherit-mode="extension">
 
-        <!-- Tablo başlığına İşçilik (₺) kolonu ekleniyor (BoM Maliyeti'nin ardına) -->
+        <!-- Add Labor Cost column header after BoM Cost -->
         <xpath expr="//th[hasclass('o_bom_overview_bom_cost')]" position="after">
-            <th class="text-end">İşçilik (₺)</th>
+            <th class="text-end">Labor Cost (₺)</th>
         </xpath>
 
-        <!-- Her satırda BoM Maliyeti'nin ardına iscilik_tutari değeri ekleniyor -->
+        <!-- Add labor_cost value in each row after BoM Cost cell -->
         <xpath expr="//td[hasclass('o_bom_overview_bom_cost')]" position="after">
             <td class="text-end">
-                <t t-if="line.iscilik_tutari">
-                    <t t-esc="line.iscilik_tutari.toFixed(2)"/>
+                <t t-if="line.labor_cost">
+                    <t t-esc="line.labor_cost.toFixed(2)"/>
                 </t>
                 <t t-else="">-</t>
             </td>
