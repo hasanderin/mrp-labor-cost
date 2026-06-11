@@ -6,7 +6,11 @@
         <field name="model">mrp.bom</field>
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='product_uom_id']" position="after">
+            <!--
+                product_qty ve product_uom_id bir <div class="o_row"> içinde.
+                O div'den sonra labor_cost kendi satırında görünür.
+            -->
+            <xpath expr="//div[hasclass('o_row')][field[@name='product_qty']]" position="after">
                 <field name="labor_cost" string="İşçilik (₺)"/>
             </xpath>
         </field>
