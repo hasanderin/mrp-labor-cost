@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
 
-    <!--
-        mrp.BomOverviewTable template'ini extend ediyoruz.
-        tfoot'tan önce İşçilik Maliyeti satırı ekleniyor.
-        Kolon yapısı mrp_bom_overview_table.xml tfoot'undan birebir alındı.
-    -->
     <t t-inherit="mrp.BomOverviewTable" t-inherit-mode="extension">
+
+        <!-- 1. İşçilik Maliyeti satırını tfoot'tan önce ekle -->
         <xpath expr="//tfoot" position="before">
             <tbody t-if="showCosts and data.labor_cost">
                 <tr class="table-info">
@@ -24,6 +21,14 @@
                 </tr>
             </tbody>
         </xpath>
+
+        <!-- 2. Birim Maliyeti satırında BoM Maliyetine işçiliği dahil et -->
+        <xpath expr="//tfoot/tr/td[@t-esc='formatMonetary(data.bom_cost / data.quantity)']"
+               position="replace">
+            <td class="text-end"
+                t-esc="formatMonetary((data.bom_cost + (data.labor_cost || 0)) / data.quantity)"/>
+        </xpath>
+
     </t>
 
 </templates>
