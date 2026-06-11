@@ -17,8 +17,8 @@
                 t-options='{"widget": "monetary", "display_currency": currency}'/>
         </xpath>
 
-        <!-- İşçilik Maliyeti satırını Birim Maliyet satırının altına ekle -->
-        <xpath expr="//tr[td[@name='td_mrp_bom_f']]" position="after">
+        <!-- İşçilik Maliyeti satırını Birim Maliyet satırının üstüne ekle -->
+        <xpath expr="//tr[td[@name='td_mrp_bom_f']]" position="before">
             <tr t-if="data['show_costs'] and data.get('labor_cost')">
                 <td name="td_mrp_bom_labor"/>
                 <td class="text-end"><strong>İşçilik Maliyeti</strong></td>
