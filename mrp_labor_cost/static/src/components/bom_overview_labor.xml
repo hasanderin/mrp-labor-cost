@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
 
-    <!-- Extends mrp.BomOverview OWL component (Overview button) -->
-    <t t-inherit="mrp.BomOverview" t-inherit-mode="extension">
-
-        <!-- Add Labor Cost column header after BoM Cost -->
-        <xpath expr="//th[hasclass('o_bom_overview_bom_cost')]" position="after">
-            <th class="text-end">İşçilik (₺)</th>
+    <!--
+        mrp.BomOverviewTable template'ini extend ediyoruz.
+        tfoot'tan önce İşçilik Maliyeti satırı ekleniyor.
+        Kolon yapısı mrp_bom_overview_table.xml tfoot'undan birebir alındı.
+    -->
+    <t t-inherit="mrp.BomOverviewTable" t-inherit-mode="extension">
+        <xpath expr="//tfoot" position="before">
+            <tbody t-if="showCosts and data.labor_cost">
+                <tr class="table-info">
+                    <td class="fw-bold">İşçilik Maliyeti</td>
+                    <td/>
+                    <td t-if="showUom"/>
+                    <td t-if="showAvailabilities"/>
+                    <td t-if="showAvailabilities"/>
+                    <td t-if="showAvailabilities"/>
+                    <td t-if="showLeadTimes"/>
+                    <td/>
+                    <td class="text-end fw-bold" t-esc="formatMonetary(data.labor_cost)"/>
+                    <td/>
+                    <td t-if="showAttachments"/>
+                </tr>
+            </tbody>
         </xpath>
-
-        <!-- Add labor_cost value in each row after BoM Cost cell -->
-        <xpath expr="//td[hasclass('o_bom_overview_bom_cost')]" position="after">
-            <td class="text-end">
-                <t t-if="line.labor_cost">
-                    <t t-esc="line.labor_cost.toFixed(2)"/>
-                </t>
-                <t t-else="">-</t>
-            </td>
-        </xpath>
-
     </t>
 
 </templates>
