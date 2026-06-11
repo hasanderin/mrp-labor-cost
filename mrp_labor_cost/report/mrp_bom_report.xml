@@ -10,6 +10,14 @@
     <template id="report_bom_structure_labor_cost"
               inherit_id="mrp.report_mrp_bom">
 
+        <!-- Birim Maliyet satırında BoM Maliyetine işçiliği dahil et -->
+        <xpath expr="//td[@t-esc=\"data['bom_cost'] / data['quantity']\"]" position="replace">
+            <td class="text-end"
+                t-esc="(data['bom_cost'] + data.get('labor_cost', 0.0)) / data['quantity']"
+                t-options='{"widget": "monetary", "display_currency": currency}'/>
+        </xpath>
+
+        <!-- İşçilik Maliyeti satırını Birim Maliyet satırının altına ekle -->
         <xpath expr="//tr[td[@name='td_mrp_bom_f']]" position="after">
             <tr t-if="data['show_costs'] and data.get('labor_cost')">
                 <td name="td_mrp_bom_labor"/>
