@@ -2,29 +2,31 @@
 <odoo>
 
     <!--
-        1. PDF RAPORU — TABLO BAŞLIĞI
-        Asıl tablo mrp.report_mrp_bom template'inde yer alır.
-        BoM Maliyeti ve Ürün Maliyeti başlıklarından sonra İşçilik (₺) ekleniyor.
+        PDF RAPORU — mrp.report_mrp_bom inherit edilir.
+        "Unit Cost" satırının (td_mrp_bom_f) hemen altına
+        İşçilik Maliyeti satırı eklenir.
+        Kolon yaklaşımı kullanılmaz; bileşen satırlarına dokunulmaz.
     -->
-    <template id="report_bom_structure_labor_cost_header"
+    <template id="report_bom_structure_labor_cost"
               inherit_id="mrp.report_mrp_bom">
-        <xpath expr="//thead/tr/th[last()]" position="after">
-            <th t-if="data['show_costs']" class="text-end">İşçilik (₺)</th>
-        </xpath>
-    </template>
 
-    <!--
-        2. PDF RAPORU — SATIR DEĞERLERİ
-        Her BOM satırı mrp.report_mrp_bom_pdf_line ile render edilir.
-        Satırdaki son td'den sonra o reçetenin labor_cost değeri ekleniyor.
-    -->
-    <template id="report_bom_structure_labor_cost_line"
-              inherit_id="mrp.report_mrp_bom_pdf_line">
-        <xpath expr="//tr/td[last()]" position="after">
-            <td t-if="data['show_costs']" class="text-end">
-                <t t-esc="'%.2f' % (l.get('labor_cost') or 0.0)"/>
-            </td>
+        <xpath expr="//tr[td[@name='td_mrp_bom_f']]" position="after">
+            <tr t-if="data['show_costs'] and data.get('labor_cost')">
+                <td name="td_mrp_bom_labor"/>
+                <td class="text-end"><strong>İşçilik Maliyeti</strong></td>
+                <td groups="uom.group_uom"/>
+                <td t-if="data['show_availabilities']"/>
+                <td t-if="data['show_availabilities']"/>
+                <td t-if="data['show_availabilities']"/>
+                <td t-if="data['show_lead_times']"/>
+                <td/>
+                <td class="text-end"
+                    t-esc="data['labor_cost']"
+                    t-options='{"widget": "monetary", "display_currency": currency}'/>
+                <td/>
+            </tr>
         </xpath>
+
     </template>
 
 </odoo>
