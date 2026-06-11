@@ -11,7 +11,7 @@
               inherit_id="mrp.report_mrp_bom">
 
         <!-- Birim Maliyet satırında BoM Maliyetine işçiliği dahil et -->
-        <xpath expr="//td[@t-esc=\"data['bom_cost'] / data['quantity']\"]" position="replace">
+        <xpath expr="//td[@t-esc=&quot;data['bom_cost'] / data['quantity']&quot;]" position="replace">
             <td class="text-end"
                 t-esc="(data['bom_cost'] + data.get('labor_cost', 0.0)) / data['quantity']"
                 t-options='{"widget": "monetary", "display_currency": currency}'/>
